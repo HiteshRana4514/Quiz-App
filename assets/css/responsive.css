@@ -1,0 +1,10 @@
+@media screen and (min-width: 720px){
+    .option-wrap .form-control{
+        width: 45%;
+    }
+    .question-block{
+        display: flex;
+    justify-content: center;
+    flex-direction: column;
+    }
+}

@@ -1,0 +1,94 @@
+{
+    "quiz": [
+        {
+            "subject" : "English",
+            "paper" : [
+                {
+                    "question-1" : "What is your name ?",
+                    "answers" : ["hitesh","manish","vishal","kriplani"],
+                    "correct" : "vishal"
+                },
+                {
+                    "question-2" : "What is your age ?",
+                    "answers" : [20,25,27,40],
+                    "correct" : 40
+                },
+                {
+                    "question-1" : "What is your occupation?",
+                    "answers" : ["plumber","engineer","jhadu","tel-chtai"],
+                    "correct" : "tel-chtai"
+                },
+                {
+                    "question-1" : "What is your birth place",
+                    "answers" : ["delhi","ambala","sikandrabad","Kuda"],
+                    "correct" : "kuda"
+                },
+                {
+                    "question-1" : "What is your name ?",
+                    "answers" : ["hitesh","manish","vishal","kriplani"],
+                    "correct" : "vishal"
+                }
+            ]
+        },
+        {
+            "subject" : "Maths",
+            "paper" : [
+                {
+                    "question-1" : "What is 2 + 2?",
+                    "answers" : [4,10,5,76],
+                    "correct" : 76
+                },
+                {
+                    "question-2" : "What is 2 X 2?",
+                    "answers" : [20,25,27,40],
+                    "correct" : 40
+                },
+                {
+                    "question-1" : "What is 24 - 24?",
+                    "answers" : [0,1,10,13],
+                    "correct" : 13
+                },
+                {
+                    "question-1" : "What is your birth place",
+                    "answers" : ["delhi","ambala","sikandrabad","Kuda"],
+                    "correct" : "kuda"
+                },
+                {
+                    "question-1" : "What is your name ?",
+                    "answers" : ["hitesh","manish","vishal","kriplani"],
+                    "correct" : "vishal"
+                }
+            ]
+        },
+        {
+            "subject" : "General Knowledge",
+            "paper" : [
+                {
+                    "question-1" : "What is your name ?",
+                    "answers" : ["hitesh","manish","vishal","kriplani"],
+                    "correct" : "vishal"
+                },
+                {
+                    "question-2" : "What is your age ?",
+                    "answers" : [20,25,27,40],
+                    "correct" : 40
+                },
+                {
+                    "question-1" : "What is your occupation?",
+                    "answers" : ["plumber","engineer","jhadu","tel-chtai"],
+                    "correct" : "tel-chtai"
+                },
+                {
+                    "question-1" : "What is your birth place",
+                    "answers" : ["delhi","ambala","sikandrabad","Kuda"],
+                    "correct" : "kuda"
+                },
+                {
+                    "question-1" : "What is your name ?",
+                    "answers" : ["hitesh","manish","vishal","kriplani"],
+                    "correct" : "vishal"
+                }
+            ]
+        }
+    ]
+}
