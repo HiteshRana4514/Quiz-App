@@ -12,6 +12,11 @@ const optionLabel = document.querySelectorAll('.optionLabel');
 const nextBtn = document.querySelector('.next-btn');
 const questionNo = document.querySelector('.question-no');
 const seconds = document.querySelector('.seconds');
+const reportWrap = document.querySelector('.report-wrap');
+
+
+// result json data 
+const result = []
 
 // open dashboard btn on click of account btn 
 accountBtn.onclick = () => {
@@ -45,6 +50,18 @@ window.onload = (event) => {
     loaderWrap.classList.remove('active');
 }
 
+
+// create dynamic object of each subject 
+let quizSubjectId = 1;
+
+class subject {
+    constructor(subjectName, quizId, questions) {
+        this.subject = subjectName;
+        this.quizId = quizId;
+        this.questions = questions;
+    }
+}
+
 // get the id of each subject category 
 
 function getCategory() {
@@ -54,6 +71,10 @@ function getCategory() {
             let subjectCategory = item.innerText.toLowerCase();
             let subjectId = category[subjectCategory];
             generateQuiz(subjectId, subjectCategory);
+            result.push(new subject(subjectCategory, quizSubjectId, []));
+            quizSubjectId++;
+            console.log('results : - ',result);
+
         }
     })
 }
@@ -71,7 +92,6 @@ function generateQuiz(subjectId, subjectCategory) {
             getSubjectData(data);
             loaderWrap.classList.remove('active');
             subjectCategoryHead.innerText = subjectCategory;
-            // console.log(data);
 
         })
         .catch(error => console.log('Error:- ', error)
@@ -86,9 +106,6 @@ function getSubjectData(data) {
     quizWrap.classList.add('active');
     let eachQuestionObj = data.results;
     nextQuestion(eachQuestionObj)
-
-    console.log(eachQuestionObj);
-
 }
 
 // next question on next or time end 
@@ -104,11 +121,15 @@ function nextQuestion(eachQuestionObj) {
             eachSingleQuestion(count, eachQuestionObj)
             questionNo.innerText = (count + 1) + "."
             condition = false;
+            // storeData()
             setTimer()
         }
         else {
             if (nextBtn.innerText == 'Submit') {
-                alert('Submited');
+                quizWrap.classList.remove('active');
+                reportWrap.classList.add('active');
+                console.log('final result:- ',result);
+                
             }
             return
         };
@@ -132,6 +153,7 @@ function nextQuestion(eachQuestionObj) {
                 count++
                 eachSingleQuestion(count, eachQuestionObj)
                 questionNo.innerText = (count + 1) + "."
+                // storeData()
                 setTimer()
             }
 
@@ -144,17 +166,18 @@ function nextQuestion(eachQuestionObj) {
 }
 
 function eachSingleQuestion(itemNumber, questionArr) {
+    resetRadio()
     let questionObj = questionArr[itemNumber];
     let incorrectAns = questionObj.incorrect_answers;
     let correctAns = questionObj.correct_answer;
     let ansArr = [correctAns, ...incorrectAns];
     let allAns = shuffleArr(ansArr);
     question.innerHTML = questionObj.question;
+    getResponse(questionObj, allAns);
     if (itemNumber == 19) {
         nextBtn.innerText = 'Submit'
     }
     setEachOption(allAns);
-    console.log(allAns);
 }
 
 
@@ -182,5 +205,54 @@ function setEachOption(allAns) {
     })
 }
 
+// reset all radioBtns on next questions 
+function resetRadio() {
+    optionsAnswer.forEach(function (e) {
+        e.checked = false;
+    })
+}
 
+// get users data or response 
+// let response = {
+//     question : '',
+//     options : [],
+//     correctOption : '',
+//     userResponse : ''
+// };
+class response {
+    constructor(question, options, correctOption, userResponse) {
+        this.question = question;
+        this.options = options;
+        this.correctOption = correctOption;
+        this.userResponse = userResponse;
+    }
+}
 
+function getResponse(questionObj, optionsArr) {
+    let responseVar = new response(questionObj.question, optionsArr, questionObj.correct_answer);
+    optionsAnswer.forEach(function (e) {
+        e.onchange = () => {
+            responseVar.userResponse = e.getAttribute('data-value');
+        }
+    })
+    storeData(responseVar)
+
+}
+
+// collect user response from user 
+function collectUserResponse(responseVar) {
+    optionsAnswer.forEach(function (e) {
+        e.onchange = () => {
+            responseVar.userResponse = e.getAttribute('data-value');
+
+        }
+    })
+}
+
+// store this data into results arr 
+function storeData(responseVar) {
+    let currentElement = result[result.length - 1];
+    currentElement.questions.push(responseVar);
+    console.log('result second:-',result);
+
+}
