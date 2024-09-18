@@ -7,4 +7,23 @@
     justify-content: center;
     flex-direction: column;
     }
+    .report-details .container{
+        height: 100%;
+    }
+    .detailed-report-head{
+        margin-bottom: 0;
+    }
+    .detailed-report-block{
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-between;
+        height: 95%;
+    }
+    .right-report{
+        width: 45%;
+    }
+    .left-report{
+        width: 45%;
+    }
 }

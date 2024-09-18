@@ -13,6 +13,12 @@ const nextBtn = document.querySelector('.next-btn');
 const questionNo = document.querySelector('.question-no');
 const seconds = document.querySelector('.seconds');
 const reportWrap = document.querySelector('.report-wrap');
+const reportGraph = document.querySelector('.report-graph');
+const reportBtn = document.querySelector('.report-btn');
+const detailedReportShow = document.querySelector('.detailed-report-show');
+const reportDetails = document.querySelector('.report-details');
+const performance = document.querySelector('.performance');
+const performanceImg = document.querySelector('.performance-img');
 
 
 // result json data 
@@ -128,6 +134,7 @@ function nextQuestion(eachQuestionObj) {
             if (nextBtn.innerText == 'Submit') {
                 quizWrap.classList.remove('active');
                 reportWrap.classList.add('active');
+                getDetailedReport(result)
                 console.log('final result:- ',result);
                 
             }
@@ -213,12 +220,6 @@ function resetRadio() {
 }
 
 // get users data or response 
-// let response = {
-//     question : '',
-//     options : [],
-//     correctOption : '',
-//     userResponse : ''
-// };
 class response {
     constructor(question, options, correctOption, userResponse) {
         this.question = question;
@@ -256,3 +257,95 @@ function storeData(responseVar) {
     console.log('result second:-',result);
 
 }
+
+// get detailed report 
+function getDetailedReport(result){
+    reportBtn.onclick = ()=>{
+        let currentQuiz = result[result.length-1];
+        let quizSubject = currentQuiz.subject;
+        let allQuestions = currentQuiz.questions;
+        let totalQuestions = 0;
+        let attempedQuestions = 0;
+        let wrongAnswers = 0;
+        let correctAnswers = 0;
+        let unattempedQuestions = 0;
+        let totalMarks = 0;
+        let obtainedMarks = 0;
+        allQuestions.forEach((item)=>{
+            totalQuestions++;
+            totalMarks += 2;
+            if(item.userResponse){
+                attempedQuestions++
+                if(item.userResponse===item.correctOption){
+                    obtainedMarks += 2;
+                    correctAnswers++;
+                }
+                else{
+                    wrongAnswers++
+                }
+            }
+            else{
+                unattempedQuestions++
+            }
+        })
+        printDetails(quizSubject, totalQuestions, attempedQuestions, unattempedQuestions, totalMarks, obtainedMarks, wrongAnswers, correctAnswers)
+        reportWrap.classList.remove('active');
+        reportDetails.classList.add('active');
+    }
+}
+
+// print detailed report of quiz 
+function printDetails(quizSubject, totalQuestions, attempedQuestions, unattempedQuestions, totalMarks, obtainedMarks, wrongAnswers, correctAnswers){
+    let percentageObtained = (obtainedMarks/totalMarks)* 100;
+    const detailHtml = `<li><span class="report-key subject-key">Subject</span><span class="report-value subject-value">${quizSubject}</span></li>
+                            <li><span class="report-key total-key">Total Questions</span><span class="report-value total-value">${totalQuestions}</span></li>
+                            <li><span class="report-key attemped-key">Attemped Questions</span><span class="report-value attempted-value">${attempedQuestions}</span></li>
+                            <li><span class="report-key unattemped-key">Unattemped Questions</span><span class="report-value unattemped-value">${unattempedQuestions}</span></li>
+                            <li><span class="report-key Wrong-key">Wrong Answers</span><span class="report-value wrong-value">${wrongAnswers}</span></li>
+                            <li><span class="report-key correct-key">Correct Answers</span><span class="report-value correct-value">${correctAnswers}</span></li>
+                            <li><span class="report-key total-marks-key">Total Marks</span><span class="report-value total-marks-value">${totalMarks}</span></li>
+                            <li><span class="report-key marks-obtained-key">Marks Obtained</span><span class="report-value marks-obtained-value">${obtainedMarks}</span></li>
+                            <li><span class="report-key total-percent-key">Percentage</span><span class="report-value total-percent-value">${percentageObtained}%</span></li>`
+
+    detailedReportShow.innerHTML = detailHtml;
+    if(percentageObtained<=100 && percentageObtained>80){
+        performance.innerText = "Good";
+        performanceImg.src = '../assets/images/mood-happy.svg';
+    }
+    else if(percentageObtained<=80 && percentageObtained>50){
+        performance.innerText = "Average"
+        performanceImg.src = './assets/images/mood-avg.svg';
+    }
+    else{
+        performance.innerText = "Bad"
+        performanceImg.src = './assets/images/mood-bad.svg';
+    }
+    detailedChart(totalQuestions, unattempedQuestions,wrongAnswers,correctAnswers)
+}
+
+
+function detailedChart(totalQuestions, unattempedQuestions, wrongAnswers, correctAnswers){
+    let correctAnswersPercentage = (correctAnswers/totalQuestions)*100;
+    let wrongAnswersPercentage = (wrongAnswers/totalQuestions)*100;
+    let unattempedQuestionsPercentage = (unattempedQuestions/totalQuestions)*100;
+    new Chart(reportGraph, {
+        type: 'pie',
+        data: {
+          labels: ['Correct', 'Wrong', 'Unatempted'],
+          datasets: [{
+            label: 'Percentage',
+            data: [correctAnswersPercentage , wrongAnswersPercentage, unattempedQuestionsPercentage],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+}
+
+
